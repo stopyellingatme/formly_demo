@@ -1,0 +1,104 @@
+[
+	{
+		"key": "email",
+		"type": "input",
+		"templateOptions": {
+			"label": "Email address",
+			"placeholder": "Enter email",
+			"type": "email",
+			"required": true
+		}
+	},
+	{
+		"key": "fullName",
+		"type": "input",
+		"templateOptions": {
+			"label": "Full Name"
+		}
+	},
+	{
+		"key": "numberOfKeyboards",
+		"type": "input",
+		"templateOptions": {
+			"label": "Number of Keyboards",
+			"type": "number",
+			"min": 31
+		}
+	},
+	{
+		"template": "<hr/><hr/><hr/><br/>"
+	},
+	{
+		"key": "typeId",
+		"type": "select",
+		"templateOptions": {
+			"label": "User Type",
+			"options": []
+		},
+    "expressionProperties": {
+			"templateOptions.options": "formState.selectOptionsData.userTypes"
+		}
+	},
+	{
+		"key": "favoriteColorId",
+		"type": "select",
+		"templateOptions": {
+			"label": "Favorite Color",
+			"options": []
+		},
+    "expressionProperties": {
+			"templateOptions.options": "formState.selectOptionsData.colors"
+		}
+	},
+	{
+		"key": "likesMusic",
+		"type": "radio",
+		"templateOptions": {
+			"label": "Likes Music?",
+			"options": [
+				{ "value": true, "label": "Yes" },
+				{ "value": false, "label": "No" }
+			]
+		}
+	},
+	{
+		"key": "favoriteGenreId",
+		"type": "select",
+		"templateOptions": {
+			"label": "Favorite Music",
+			"options": [],
+			"valueProp": "id",
+			"labelProp": "name"
+		},
+		"hideExpression": "!model.likesMusic",
+		"expressionProperties": {
+			"templateOptions.options": "formState.selectOptionsData.genres"
+		}
+	},
+	{
+		"key": "ipAddress",
+		"type": "input",
+		"templateOptions": {
+			"label": "IP Address"
+		},
+		"validators": {
+			"validation": ["ip"]
+		}
+	},
+	{
+		"key": "address",
+		"wrappers": ["panel"],
+		"templateOptions": { "label": "Address" },
+		"fieldGroup": [
+			{
+				"key": "town",
+				"type": "input",
+				"templateOptions": {
+					"required": true,
+					"type": "text",
+					"label": "Town"
+				}
+			}
+		]
+	}
+]
