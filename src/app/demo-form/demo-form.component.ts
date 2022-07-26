@@ -12,6 +12,7 @@ import demo_fields from "../formly/demo.fields.json";
 })
 export class DemoFormComponent {
 	form = new FormGroup({});
+
 	model = {
 		email: "email@gmail.com",
 		fullName: "John Doe",
@@ -29,7 +30,8 @@ export class DemoFormComponent {
 		},
 	};
 
-	fields: FormlyFieldConfig[] = [];
+  //@ts-ignore
+	fields: FormlyFieldConfig[] = demo_fields;
 
 	constructor(private readonly appService: AppService) {}
 

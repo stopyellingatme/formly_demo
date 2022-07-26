@@ -17,9 +17,11 @@ import { DemoFormComponent } from "./demo-form/demo-form.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { GroupWrapperComponent } from "./shared/wrappers/group-wrapper.component";
 import { AutocompleteComponent } from "./shared/templates/autocomplete.component";
+import { ReactiveFormComponent } from "./reactive-form.component";
+import { PresentationComponent } from "./presentation/presentation.component";
 
 @NgModule({
-	declarations: [AppComponent, DemoFormComponent, GroupWrapperComponent, AutocompleteComponent],
+	declarations: [AppComponent, DemoFormComponent, GroupWrapperComponent, AutocompleteComponent, ReactiveFormComponent, PresentationComponent],
 	imports: [
 		BrowserModule,
 		ReactiveFormsModule,
