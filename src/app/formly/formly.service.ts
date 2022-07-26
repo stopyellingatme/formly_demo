@@ -23,6 +23,8 @@ export class FormlyService {
 			templateOptions: {
 				label: config.label,
 				type: "number",
+        min: config.min,
+        max: config.max,
 			},
 		};
 	}

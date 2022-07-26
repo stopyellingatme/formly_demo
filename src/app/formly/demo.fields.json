@@ -1,19 +1,18 @@
 [
 	{
+		"key": "fullName",
+		"type": "input",
+		"templateOptions": {
+			"label": "Full Name"
+		}
+	},
+	{
 		"key": "email",
 		"type": "input",
 		"templateOptions": {
 			"label": "Email address",
 			"placeholder": "Enter email",
-			"type": "email",
 			"required": true
-		}
-	},
-	{
-		"key": "fullName",
-		"type": "input",
-		"templateOptions": {
-			"label": "Full Name"
 		}
 	},
 	{
@@ -22,21 +21,34 @@
 		"templateOptions": {
 			"label": "Number of Keyboards",
 			"type": "number",
-			"min": 31
+			"max": 10
+		},
+		"modelOptions": {
+			"updateOn": "change"
 		}
 	},
 	{
-		"template": "<hr/><hr/><hr/><br/>"
+		"key": "ipAddress",
+		"type": "input",
+		"templateOptions": {
+			"label": "IP Address"
+		},
+		"validators": {
+			"validation": ["ip"]
+		}
 	},
 	{
-		"key": "typeId",
+		"template": "<br/><hr/><br/>"
+	},
+	{
+		"key": "colorTypeId",
 		"type": "select",
 		"templateOptions": {
-			"label": "User Type",
+			"label": "Color Type",
 			"options": []
 		},
-    "expressionProperties": {
-			"templateOptions.options": "formState.selectOptionsData.userTypes"
+		"expressionProperties": {
+			"templateOptions.options": "formState.selectOptionsData.colorTypes"
 		}
 	},
 	{
@@ -46,9 +58,14 @@
 			"label": "Favorite Color",
 			"options": []
 		},
-    "expressionProperties": {
+		"expressionProperties": {
+			"hide": "!model.colorTypeId && model.colorTypeId !== 0",
+			"model.favoriteColorId": "(!model.colorTypeId && model.colorTypeId !== 0) ? null : model.favoriteColorId",
 			"templateOptions.options": "formState.selectOptionsData.colors"
 		}
+	},
+	{
+		"template": "<br/><hr/><br/>"
 	},
 	{
 		"key": "likesMusic",
@@ -63,7 +80,7 @@
 	},
 	{
 		"key": "favoriteGenreId",
-		"type": "select",
+		"type": "autocomplete",
 		"templateOptions": {
 			"label": "Favorite Music",
 			"options": [],
@@ -72,18 +89,12 @@
 		},
 		"hideExpression": "!model.likesMusic",
 		"expressionProperties": {
-			"templateOptions.options": "formState.selectOptionsData.genres"
+			"templateOptions.options": "formState.selectOptionsData.genres",
+			"model.favoriteGenreId": "!model.likesMusic ? null : model.favoriteGenreId"
 		}
 	},
 	{
-		"key": "ipAddress",
-		"type": "input",
-		"templateOptions": {
-			"label": "IP Address"
-		},
-		"validators": {
-			"validation": ["ip"]
-		}
+		"template": "<br/><hr/><br/>"
 	},
 	{
 		"key": "address",
@@ -91,12 +102,17 @@
 		"templateOptions": { "label": "Address" },
 		"fieldGroup": [
 			{
-				"key": "town",
+				"key": "street",
 				"type": "input",
 				"templateOptions": {
-					"required": true,
-					"type": "text",
-					"label": "Town"
+					"label": "Street"
+				}
+			},
+			{
+				"key": "city",
+				"type": "input",
+				"templateOptions": {
+					"label": "City"
 				}
 			}
 		]
