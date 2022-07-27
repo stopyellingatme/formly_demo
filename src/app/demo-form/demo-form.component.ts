@@ -15,13 +15,12 @@ export class DemoFormComponent {
 
 	model = {
 		email: "email@gmail.com",
-		fullName: "John Doe",
+		numberOfKeyboards: null,
+		ipAddress: "124.41.231.44",
 		colorTypeId: 0,
 		favoriteColorId: 5,
-		numberOfKeyboards: 32,
 		likesMusic: true,
 		favoriteGenreId: 3,
-		ipAddress: "124.41.231.44",
 		address: {
 			city: "San Diego",
 			street: "123 Main St",
@@ -30,10 +29,10 @@ export class DemoFormComponent {
 		},
 	};
 
-  //@ts-ignore
-	fields: FormlyFieldConfig[] = demo_fields;
+	fields: FormlyFieldConfig[] = [];
 
-	constructor(private readonly appService: AppService) {}
+	constructor(private readonly appService: AppService) {
+	}
 
 	onSubmit(model: DemoFormComponent["model"]) {
 		console.log(model);

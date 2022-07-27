@@ -11,6 +11,9 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 				<label for="name">Email</label>
 				<input type="email" class="form-control" formControlName="email" />
+
+        <label for="name">Email Address 2</label>
+				<input type="email" class="form-control" formControlName="emailAddress2" />
 			</div>
 		</form>
 	`,
@@ -20,6 +23,7 @@ export class ReactiveFormComponent {
 	myForm: FormGroup = new FormGroup({
 		name: new FormControl("", [Validators.required, Validators.minLength(3)]),
 		email: new FormControl("", [Validators.required, Validators.email]),
+    emailAddress2: new FormControl("", [Validators.required, Validators.email]),
 	});
 
 	constructor() {}

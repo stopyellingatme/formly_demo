@@ -83,9 +83,7 @@
 		"type": "autocomplete",
 		"templateOptions": {
 			"label": "Favorite Music",
-			"options": [],
-			"valueProp": "id",
-			"labelProp": "name"
+			"options": []
 		},
 		"hideExpression": "!model.likesMusic",
 		"expressionProperties": {

@@ -1,241 +1,268 @@
-import { FormlyFieldConfig, FormlyFormOptions } from "@ngx-formly/core";
+/**
+  Make sure to go over the app.module inpprts and setting up the formly.config file
+ */
 
-const fields: FormlyFieldConfig[] = [
-	// Easy and simple. Just an input field.
-  // Defaults to text.
-  // Main thing is to ensure the Key and Modal[key] are the same.
-	{
-		key: "fullName",
-		type: "input",
-		templateOptions: {
-			label: "Full Name",
-		},
-	},
-	// Now we add some validation
-  // Field is still prepopulated with model value
-	{
-		key: "email",
-		type: "input",
-		templateOptions: {
-			label: "Email address",
-			required: true,
-		},
-	},
-	// Number input field... with validation
-	{
-		key: "numberOfKeyboards",
-		type: "input",
-		templateOptions: {
-			label: "Number of Keyboards",
-			type: "number",
-			min: 10,
-		},
-	},
-  // We can add custom validators to our config and display the error however we want
-  {
-		key: "ipAddress",
-		type: "input",
-		templateOptions: {
-			label: "IP Address",
-		},
-		validators: {
-			validation: ["ip"],
-		},
-	},
-	// Little different... we can add plain html elements to template
-	{
-		template: `<br/><hr/><br/>`,
-	},
-	// Alright, now we're using a dropdown box... getting complicated
+// Easy and simple. Just an input field.
+// Defaults to text.
+// Main thing is to ensure the Key and Modal[key] are the same.
+// * Go over the different ways to add validation
+// Field is prepopulated with model value as long as keys match
+// {
+// 	key: "email",
+// 	type: "input",
+// 	templateOptions: {
+// 		label: "Email address",
+// 	},
+// },
+// 		required: true,
 
+// Number input field... with validation
+// {
+// 	key: "numberOfKeyboards",
+// 	type: "input",
+// 	templateOptions: {
+// 		label: "Number of Keyboards",
+// 		type: "number",
+// 		min: 10,
+// 	},
+// },
+
+// We can add custom validators to our config and display the error however we want
+// {
+// 	key: "ipAddress",
+// 	type: "input",
+// 	templateOptions: {
+// 		label: "IP Address",
+// 	},
+// 	validators: {
+// 		validation: ["ip"],
+// 	},
+// },
+
+// {
+//   key: 'ip',
+//   type: 'input',
+//   templateOptions: {
+//     label: 'IP Address (custom validation message through `validation` property)',
+//     required: true,
+//     pattern: /(\d{1,3}\.){3}\d{1,3}/,
+//   },
+//   validation: {
+//     messages: {
+//       pattern: (error, field: FormlyFieldConfig) => `"${field.formControl.value}" is not a valid IP Address`,
+//     },
+//   },
+// },
+
+// Little different... we can add plain html elements to template
+// {
+// 	template: `<br/><hr/><br/>`,
+// },
+
+// Alright, now we're using a dropdown box... getting complicated
 /**
 We're going to go over how to get ref data in different ways
-- We can simply bind to the options property of the field
-- We can pass an observalbe straight to the options prop as well!
 - We can hide/disable a dropdown based on the value of another field
 - Filtering can be done in a couple of different ways...
-  - (Add formlyOptions) and show how to get data from formState
 */
-			// options: [
-      //   { value: null, label: "--" },
-      //   { value: 0, label: "Polychrome" },
-      //   { value: 1, label: "Monochrome" },
-      // ],
 
-      // options: this.appService.getColorTypes(),
-  {
-    key: "colorTypeId",
-    type: "select",
-    templateOptions: {
-      label: "Color Type",
-    },
-  },
-  // We can even show dropdowns in groups...
-  {
-    key: "favoriteColorId",
-    type: "select",
-    templateOptions: {
-      label: "Favorite Color",
-      options: this.appService.getColorsWithGroups(),
-    },
-    expressionProperties: {
-      "disable": "!model.colorTypeId && model.colorTypeId !== 0",
-      // "hide": "!model.colorTypeId && model.colorTypeId !== 0",
+// {
+//   key: "colorTypeId",
+//   type: "select",
+//   templateOptions: {
+//     label: "Color Type",
+//     options: [
+//        { value: null, label: "--" },
+//        { value: 0, label: "Polychrome" },
+//        { value: 1, label: "Monochrome" },
+//      ],
+//   },
+// },
 
-      /**
-        What if we change the colorTypeId field?
-        We need to update the favoriteColorId field to make sure we don't get an inconsistent state in the db.
-        So we can hook directly into the model and update the field.
-       */
-      // "model.favoriteColorId": "!model.colorTypeId ? null : model.favoriteColorId",
+// We can pass an observalbe straight to the options prop as well!
+// options: this.appService.getColorTypes(),
 
-      //* But what about filtering dropdown values by another field?
-      // We can use the hooks option to hook directly into the fields lifecycle
-      // Or we can use the formOptions to hydrate our firld with options in much the same way
+// We can even dropdown options in groups...
+// {
+//   key: "favoriteColorId",
+//   type: "select",
+//   templateOptions: {
+//     label: "Favorite Color",
+//     options: this.appService.getColorsWithGroups(),
+//   },
+// },
 
-      // "templateOptions.options": "formState.selectOptionsData.colors",
-    },
-    // hooks: {
-    //   onInit: (field: FormlyFieldConfig) => {
-    //     field.templateOptions.options = field.form.get("colorTypeId").valueChanges.pipe(
-    //       startWith(this.model.favoriteColorId),
-    //       switchMap((colorId) => this.appService.getColors(colorId))
-    //     );
-    //    },
-    // }
-  },
-  {
-		template: `<br/><hr/><br/>`,
-	},
-  // What about fields that are dependant on other fields (radio buttons)?
-	{
-		key: "likesMusic",
-		type: "radio",
-		templateOptions: {
-			label: "Likes Music?",
-			options: [
-				{ value: true, label: "Yes" },
-				{ value: false, label: "No" },
-			],
-		},
-	},
-  //! Add formOptions to component and update the <form/> tag
-  // This field uses formOptions to get ref data AND is dependant on the likesMusic field
-  //* Main point of this section is to discuss the Label and Value Prop
-	{
-		key: "favoriteGenreId",
-		type: "select",
-		templateOptions: {
-			label: "Favorite Music",
-			options: [],
-			valueProp: "id",
-			labelProp: "name",
-		},
-		hideExpression: "!model.likesMusic",
-		expressionProperties: {
-			"templateOptions.options": "formState.selectOptionsData.genres",
-      "model.favoriteGenreId": "!model.likesMusic ? null : model.favoriteGenreId",
-		},
-	},
-  // What if we change this to an autocomplete field? Still works because of custom field templates!
-  // Use appService call to get properly formatted data
-    // type: "autocomplete",
-  {
-		template: `<br/><hr/><br/>`,
-	},
-  // LAST BIT!
-  // We can even add a custom form wrapper like an Card wrapper for our form
-  // key: "address", Which can bind to a model property giving us nested forms!
-	{
-		key: "address",
-		wrappers: ["panel"],
-		templateOptions: { label: "Address" },
-		fieldGroup: [
-      {
-				key: "street",
-				type: "input",
-				templateOptions: {
-					label: "Street",
-				},
-			},
-			{
-				key: "city",
-				type: "input",
-				templateOptions: {
-					label: "City",
-				},
-			},
-		],
-	},
-];
+// - We can hide/disable a dropdown based on the value of another field
+// expressionProperties: {
+//   "templateOptions.disabled": "!model.colorTypeId && model.colorTypeId !== 0",
+// },
 
-// Use with JSON powered forms
-// No need to hydrate reference data on directly on field config
-const options: FormlyFormOptions = {
-  formState: {
-    selectOptionsData: {
-      colors: this.appService.getColors(this.model.colorTypeId),
-      genres: [
-        { id: 0, name: "Rock" },
-        { id: 1, name: "Jazz" },
-        { id: 2, name: "Blues" },
-        { id: 3, name: "EDM" },
-        { id: 4, name: "Country" },
-        { id: 5, name: "Big Band" },
-        { id: 6, name: "Pop" },
-      ],
-      colorTypes: this.appService.getColorTypes(),
-    },
-  },
-};
+// It's also very easy to hide the field based on a condition
+// "hide": "!model.colorTypeId && model.colorTypeId !== 0",
 
+/**
+  What if we change the colorTypeId field?
+  We need to update the favoriteColorId field to make sure we don't get an inconsistent state in the db.
+  So we can hook directly into the model and update the field.
+*/
+// "model.favoriteColorId": "!model.colorTypeId && model.colorTypeId !== 0 ? null : model.favoriteColorId",
 
-onFieldChanges() {
-  this.form.get("colorTypeId").valueChanges.subscribe((colorTypeId) => {
-    this.options.formState.selectOptionsData["colors"] = this.appService.getColors(colorTypeId);
-  });
-}
+//* But what about filtering dropdown values by another field's value?
+// We can use the hooks option to hook directly into the fields lifecycle
+//* Replace templateOptions with: options: this.appService.getColors(this.model.colorTypeId),
+// hooks: {
+//   onInit: (field: FormlyFieldConfig) => {
+//     field.form.get("colorTypeId").valueChanges.subscribe((colorTypeId) => {
+//       field.templateOptions.options = this.appService.getColors(colorTypeId);
+//     });
+//    },
+// }
 
+//* Or we can use the formOptions to hydrate our field with options in much the same way
+//* Tell them to wait while you add all this stuff... then go over it.
+// "templateOptions.options": "formState.selectOptionsData.colors",
+//* Don't forget to add the [options] attribute to the formly-form
+// options: FormlyFormOptions = {
+//   formState: {
+//     selectOptionsData: {
+//       colors: this.appService.getColors(this.model.colorTypeId),
+//       colorTypes: this.appService.getColorTypes(),
+//       genres: [
+//         { id: 0, name: "Rock" },
+//         { id: 1, name: "Jazz" },
+//         { id: 2, name: "Blues" },
+//         { id: 3, name: "EDM" },
+//         { id: 4, name: "Country" },
+//         { id: 5, name: "Big Band" },
+//         { id: 6, name: "Pop" },
+//       ],
+//     },
+//   },
+// };
 
-fields: FormlyFieldConfig[] = [
-  this.formlyService.input({key: "email", label: "Email"}),
-  this.formlyService.input({key: "fullName", label: "Full Name"}),
-  this.formlyService.number({key: "numberOfKeyboards", label: "Number of Keyboards"}),
-  this.formlyService.select({key: "favoriteColorId", label: "Favorite Color", options: this.appService.getColorsWithGroups()}),
-  this.formlyService.select({key: "favoriteGenreId", label: "Favorite Music", options: this.appService.getGenres()}),
-];
+// onFieldChanges() {
+//   this.form.get("colorTypeId").valueChanges.subscribe((colorTypeId) => {
+//     this.options.formState.selectOptionsData["colors"] = this.appService.getColors(colorTypeId);
+//   });
+// }
 
-  // -------------------------------------------------- --------------------------------------------------
-  // -------------------------------------------------- --------------------------------------------------
-  // -------------------------------------------------- --------------------------------------------------
+//* Go over what you just did... 'twas a lot of things
 
+// {
+// 	template: `<br/><hr/><br/>`,
+// },
+
+// You've seen dependant fields... but this is with a radio button. Woooooooo
+// {
+// 	key: "likesMusic",
+// 	type: "radio",
+// 	templateOptions: {
+// 		label: "Likes Music?",
+// 		options: [
+// 			{ value: true, label: "Yes" },
+// 			{ value: false, label: "No" },
+// 		],
+// 	},
+// },
+
+//* Main point of this section is to discuss the Label and Value Prop
+// This field uses formOptions to get ref data AND is dependant on the likesMusic field
+// Easy to index from ref data.
+//* Doesn't have to conform to specific shape
+// {
+// 	key: "favoriteGenreId",
+// 	type: "select",
+// 	templateOptions: {
+// 		label: "Favorite Music",
+// 		options: [],
+// 		valueProp: "id",
+// 		labelProp: "name",
+// 	},
+// 	expressionProperties: {
+//    "hide": "!model.likesMusic",
+// 		"templateOptions.options": "formState.selectOptionsData.genres",
+//    "model.favoriteGenreId": "!model.likesMusic ? null : model.favoriteGenreId",
+// 	},
+// },
+
+//* Now... Custom field templates! We can use our own templates becasue god knows we need more then some inputs and dropdowns
+//* What about an autocomplete field?
+// Use appService call to get properly formatted data
+// genres: this.appService.getGenres(),
+// type: "autocomplete",
+
+// {
+// 	template: `<br/><hr/><br/>`,
+// },
+
+//* LAST BIT OF THE FIELD CONFIG!
+// We can even add a custom form wrapper like an Card wrapper for our form
+// key: "address", Which can bind to a model property giving us nested forms!
+// {
+// 	key: "address",
+// 	wrappers: ["panel"],
+// 	templateOptions: { label: "Address" },
+// 	fieldGroup: [
+//     {
+// 			key: "street",
+// 			type: "input",
+// 			templateOptions: {
+// 				label: "Street",
+// 			},
+// 		},
+// 		{
+// 			key: "city",
+// 			type: "input",
+// 			templateOptions: {
+// 				label: "City",
+// 			},
+// 		},
+// 	],
+// },
+
+//* NOW SHOW THAT ALL THIS CAN BE DONE WITH JSON! MUHAAHAHAAH!
+//* NOW SHOW THAT ALL THIS CAN BE DONE WITH JSON! MUHAAHAHAAH!
+//* NOW SHOW THAT ALL THIS CAN BE DONE WITH JSON! MUHAAHAHAAH!
+
+// Little extra if you have the time. Some custome DSL fun
+// constructor(private readonly appService: AppService, private readonly formlyService: FormlyService) {
+// fields: FormlyFieldConfig[] = [
+//   this.formlyService.input({key: "email", label: "Email"}),
+//   this.formlyService.input({key: "fullName", label: "Full Name"}),
+//   this.formlyService.number({key: "numberOfKeyboards", label: "Number of Keyboards"}),
+//   this.formlyService.select({key: "favoriteColorId", label: "Favorite Color", options: this.appService.getColorsWithGroups()}),
+//   this.formlyService.select({key: "favoriteGenreId", label: "Favorite Music", options: this.appService.getGenres()}),
+// ];
+
+// -------------------------------------------------- --------------------------------------------------
+// -------------------------------------------------- --------------------------------------------------
+// -------------------------------------------------- --------------------------------------------------
 
 /**
  * formly config
  */
-import { FormControl, ValidationErrors } from "@angular/forms";
-import { ConfigOption, FormlyFieldConfig } from "@ngx-formly/core";
-import { AutocompleteComponent } from "../shared/templates/autocomplete.component";
-import { GroupWrapperComponent } from "../shared/wrappers/group-wrapper.component";
-import { FormlyValueChangeEvent } from "@ngx-formly/core/lib/components/formly.field.config";
-import { Subject } from "rxjs";
+// import { FormControl, ValidationErrors } from "@angular/forms";
+// import { ConfigOption, FormlyFieldConfig } from "@ngx-formly/core";
+// import { AutocompleteComponent } from "../shared/templates/autocomplete.component";
+// import { GroupWrapperComponent } from "../shared/wrappers/group-wrapper.component";
+// import { FormlyValueChangeEvent } from "@ngx-formly/core/lib/components/formly.field.config";
+// import { Subject } from "rxjs";
 
-export const formlyConfig: ConfigOption = {
-	validators: [{ name: "ip", validation: IpValidator }],
-	validationMessages: [
-		{ name: "ip", message: IpValidatorMessage },
-		{ name: "min", message: "Number is too low" },
-		{ name: "max", message: "Number is too high" },
-	],
-	wrappers: [{ name: "panel", component: GroupWrapperComponent }],
-	types: [{ name: "autocomplete", component: AutocompleteComponent }],
-};
+// export const formlyConfig: ConfigOption = {
+// 	validators: [{ name: "ip", validation: IpValidator }],
+// 	validationMessages: [
+// 		{ name: "ip", message: IpValidatorMessage },
+// 		{ name: "min", message: "Number is too low" },
+// 		{ name: "max", message: "Number is too high" },
+// 	],
+// 	wrappers: [{ name: "panel", component: GroupWrapperComponent }],
+// 	types: [{ name: "autocomplete", component: AutocompleteComponent }],
+// };
 
-export function IpValidator(control: FormControl): ValidationErrors {
-	return !control.value || /(\d{1,3}\.){3}\d{1,3}/.test(control.value) ? null : { ip: true };
-}
+// export function IpValidator(control: FormControl): ValidationErrors {
+// 	return !control.value || /(\d{1,3}\.){3}\d{1,3}/.test(control.value) ? null : { ip: true };
+// }
 
-export function IpValidatorMessage(error: boolean, field: FormlyFieldConfig) {
-	return `"${field?.formControl?.value}" is not a valid IP Address`;
-}
-
+// export function IpValidatorMessage(error: boolean, field: FormlyFieldConfig) {
+// 	return `"${field?.formControl?.value}" is not a valid IP Address`;
+// }
