@@ -29,9 +29,129 @@ export class DemoFormComponent {
 		},
 	};
 
-	fields: FormlyFieldConfig[] = [];
+  fields = demo_fields;
+	// fields: FormlyFieldConfig[] = [
+	// 	{
+	// 		key: "email",
+	// 		type: "input",
+	// 		templateOptions: {
+	// 			label: "Email address",
+	// 			required: true,
+	// 		},
+	// 	},
+	// 	{
+	// 		key: "numberOfKeyboards",
+	// 		type: "input",
+	// 		templateOptions: {
+	// 			label: "Number of Keyboards",
+	// 			type: "number",
+	// 			min: 10,
+	// 		},
+	// 	},
+	// 	{
+	// 		key: "ipAddress",
+	// 		type: "input",
+	// 		templateOptions: {
+	// 			label: "IP Address",
+	// 		},
+	// 		validators: {
+	// 			validation: ["ip"],
+	// 		},
+	// 	},
+	// 	{
+	// 		template: `<br/><hr/><br/>`,
+	// 	},
+	// 	{
+	// 		key: "colorTypeId",
+	// 		type: "select",
+	// 		templateOptions: {
+	// 			label: "Color Type",
+	// 			options: this.appService.getColorTypes(),
+	// 		},
+	// 	},
+	// 	{
+	// 		key: "favoriteColorId",
+	// 		type: "select",
+	// 		templateOptions: {
+	// 			label: "Favorite Color",
+	// 			options: [],
+	// 		},
+	// 		expressionProperties: {
+	// 			hide: "!model.colorTypeId && model.colorTypeId !== 0",
+	// 			"model.favoriteColorId": "!model.colorTypeId && model.colorTypeId !== 0 ? null : model.favoriteColorId",
+	// 			"templateOptions.options": "formState.selectOptionsData.colors",
+	// 		},
+	// 	},
+	// 	{
+	// 		template: `<br/><hr/><br/>`,
+	// 	},
+	// 	{
+	// 		key: "likesMusic",
+	// 		type: "radio",
+	// 		templateOptions: {
+	// 			label: "Likes Music?",
+	// 			options: [
+	// 				{ value: true, label: "Yes" },
+	// 				{ value: false, label: "No" },
+	// 			],
+	// 		},
+	// 	},
+  //   {
+  //     key: "favoriteGenreId",
+  //     type: "autocomplete",
+  //     templateOptions: {
+  //       label: "Favorite Music",
+  //       options: [],
+  //     },
+  //     expressionProperties: {
+  //      "hide": "!model.likesMusic",
+  //       "templateOptions.options": "formState.selectOptionsData.genres",
+  //      "model.favoriteGenreId": "!model.likesMusic ? null : model.favoriteGenreId",
+  //     },
+  //   },
+  //   {
+  //     key: "address",
+  //     wrappers: ["panel"],
+  //     templateOptions: { label: "Address" },
+  //     fieldGroup: [
+  //       {
+  //         key: "street",
+  //         type: "input",
+  //         templateOptions: {
+  //           label: "Street",
+  //         },
+  //       },
+  //       {
+  //         key: "city",
+  //         type: "input",
+  //         templateOptions: {
+  //           label: "City",
+  //         },
+  //       },
+  //     ],
+  //   },
+	// ];
+
+	options: FormlyFormOptions = {
+		formState: {
+			selectOptionsData: {
+				colors: this.appService.getColors(this.model.colorTypeId),
+				colorTypes: this.appService.getColorTypes(),
+				genres: this.appService.getGenres(),
+			},
+		},
+	};
 
 	constructor(private readonly appService: AppService) {
+		setTimeout(() => {
+			this.onFieldChanges();
+		}, 2000);
+	}
+
+	onFieldChanges() {
+		this.form.get("colorTypeId").valueChanges.subscribe((colorTypeId) => {
+			this.options.formState.selectOptionsData["colors"] = this.appService.getColors(colorTypeId);
+		});
 	}
 
 	onSubmit(model: DemoFormComponent["model"]) {
